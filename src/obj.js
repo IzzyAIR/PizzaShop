@@ -48,3 +48,23 @@
         "myId": 8
     }
 ]
+
+
+            {/* <li onClick={() => selectCategory(0)} className={activeIndex === 0 ? 'active' : ''}>
+					Все
+				</li>
+				<li onClick={() => selectCategory(1)} className={activeIndex === 1 ? 'active' : ''}>
+					Мясные
+				</li>
+				<li onClick={() => selectCategory(2)} className={activeIndex === 2 ? 'active' : ''}>
+					Вегетарианская
+				</li>
+				<li onClick={() => selectCategory(3)} className={activeIndex === 3 ? 'active' : ''}>
+					Гриль
+				</li>
+				<li onClick={() => selectCategory(4)} className={activeIndex === 4 ? 'active' : ''}>
+					Острые
+				</li>
+				<li onClick={() => selectCategory(5)} className={activeIndex === 5 ? 'active' : ''}>
+					Закрытые
+				</li> */}

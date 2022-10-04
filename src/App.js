@@ -22,14 +22,14 @@ function App() {
 						</div>
 						<h2 className='content__title'>Все пиццы</h2>
 						<div className='content__items'>
-							<PizzaBlock title='Чизбургер-пицца' price='3500' imgUrl='' />
-							<PizzaBlock title='123' price='3500' imgUrl='' />
-							<PizzaBlock title='123' price='3500' imgUrl='' />
-							<PizzaBlock title='123' price='3500' imgUrl='' />
-							<PizzaBlock title='123' price='3500' imgUrl='' />
-							<PizzaBlock title='123' price='3500' imgUrl='' />
-							<PizzaBlock title='123' price='3500' imgUrl='' />
-							<PizzaBlock title='123' price='3500' imgUrl='' />
+							<PizzaBlock title='Чизбургер-пицца' price='35000' imgUrl='' />
+							<PizzaBlock title='Сырная' price='35000' imgUrl='' />
+							<PizzaBlock title='Креветки по-азиатски' price='35000' imgUrl='' />
+							<PizzaBlock title='123' price='35000' imgUrl='' />
+							<PizzaBlock title='123' price='35000' imgUrl='' />
+							<PizzaBlock title='123' price='35000' imgUrl='' />
+							<PizzaBlock title='123' price='35000' imgUrl='' />
+							<PizzaBlock title='123' price='35000' imgUrl='' />
 						</div>
 					</div>
 				</div>
