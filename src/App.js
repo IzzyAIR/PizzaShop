@@ -1,13 +1,12 @@
 import React from 'react';
 import './scss/app.scss';
-import PizzaContext from './PizzaContext';
+import PizzaContext from './assets/PizzaContext';
 
 import Header from './ReactComponets/Header';
 import Categories from './ReactComponets/Categories';
 import Sort from './ReactComponets/Sort';
 import PizzaBlock from './ReactComponets/PizzaBlock';
-
-
+import pizzas from './assets/Pizza.json';
 
 function App() {
 	return (
@@ -22,14 +21,9 @@ function App() {
 						</div>
 						<h2 className='content__title'>Все пиццы</h2>
 						<div className='content__items'>
-							<PizzaBlock title='Чизбургер-пицца' price='35000' imgUrl='' />
-							<PizzaBlock title='Сырная' price='35000' imgUrl='' />
-							<PizzaBlock title='Креветки по-азиатски' price='35000' imgUrl='' />
-							<PizzaBlock title='123' price='35000' imgUrl='' />
-							<PizzaBlock title='123' price='35000' imgUrl='' />
-							<PizzaBlock title='123' price='35000' imgUrl='' />
-							<PizzaBlock title='123' price='35000' imgUrl='' />
-							<PizzaBlock title='123' price='35000' imgUrl='' />
+							{pizzas.map((obj) => (
+								<PizzaBlock key={obj.id} {...obj} />
+							))}
 						</div>
 					</div>
 				</div>
