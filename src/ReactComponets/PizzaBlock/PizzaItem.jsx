@@ -36,7 +36,9 @@ function PizzaBlock({ title, price, imageUrl, sizes, types, id }) {
 					</ul>
 				</div>
 				<div className='pizza-block__bottom'>
-					<div className='pizza-block__price'>от {price} сум</div>
+					<div className='pizza-block__price'>
+						от {new Intl.NumberFormat('ru-RU').format(price)} сум
+					</div>
 					<div className='button button--outline button--add'>
 						<svg
 							width='12'

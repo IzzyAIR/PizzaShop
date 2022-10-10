@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Search from './Search';
 
 function Header() {
 	return (
@@ -14,10 +15,11 @@ function Header() {
 						</div>
 					</div>
 				</Link>
+				<Search />
 				<div className='header__cart'>
 					<Link to='/cart'>
 						<div className='button button--cart'>
-							<span>520 ₽</span>
+							<span>{new Intl.NumberFormat('ru-RU').format(150000)} Сум</span>
 							<div className='button__delimiter'></div>
 							<svg
 								width='18'
@@ -48,7 +50,7 @@ function Header() {
 									strokeLinejoin='round'
 								/>
 							</svg>
-							<span>3</span>
+							<span>2</span>
 						</div>
 					</Link>
 				</div>
