@@ -2,36 +2,37 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSortType } from '../Redux/Slice/filterSlice';
 
+export const sortType = [
+	{
+		name: 'популярности (б ~ м)',
+		sortProperty: 'rating',
+	},
+	{
+		name: 'популярности (м ~ б)',
+		sortProperty: '-rating',
+	},
+	{
+		name: 'цене (б ~ м)',
+		sortProperty: 'price',
+	},
+	{
+		name: 'цене (м ~ б)',
+		sortProperty: '-price',
+	},
+	{
+		name: 'алфавиту (а ~ я)',
+		sortProperty: '-title',
+	},
+	{
+		name: 'алфавиту (я ~ а)',
+		sortProperty: 'title',
+	},
+];
+
 function Sort() {
 	const dispatch = useDispatch();
 	const sort = useSelector((state) => state.filterS.sort);
-
-	const sortType = [
-		{
-			name: 'популярности (б ~ м)',
-			sortProperty: 'rating',
-		},
-		{
-			name: 'популярности (м ~ б)',
-			sortProperty: '-rating',
-		},
-		{
-			name: 'цене (б ~ м)',
-			sortProperty: 'price',
-		},
-		{
-			name: 'цене (м ~ б)',
-			sortProperty: '-price',
-		},
-		{
-			name: 'алфавиту (а ~ я)',
-			sortProperty: '-title',
-		},
-		{
-			name: 'алфавиту (я ~ а)',
-			sortProperty: 'title',
-		},
-	];
+	const sortRef = React.useRef();
 
 	const [open, setOpen] = React.useState(false); // открывать лист сортировки
 
@@ -40,8 +41,21 @@ function Sort() {
 		setOpen(!open);
 	};
 
+	React.useEffect(() => {
+		const clickOutside = (event) => {
+			if (!event.path.includes(sortRef.current)) {
+				// console.log('click in sort');
+				setOpen(false);
+			}
+		};
+		document.body.addEventListener('click', clickOutside);
+
+		return () => {
+			document.body.removeEventListener('click', clickOutside);
+		};
+	}, []);
 	return (
-		<div className='sort'>
+		<div ref={sortRef} className='sort'>
 			<div className='sort__label'>
 				<svg
 					width='10'
