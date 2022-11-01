@@ -106,7 +106,7 @@ function Home() {
 			return false;
 		})
 		.map((obj) => <PizzaItem key={obj.id} {...obj} />);
-
+	console.log('от бэка', pizzaItems);
 	return (
 		<div className='container'>
 			<div className='content__top'>
