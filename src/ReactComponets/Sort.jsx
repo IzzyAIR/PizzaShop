@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSortType } from '../Redux/Slice/filterSlice';
+import { selectFilter, setSortType } from '../Redux/Slice/filterSlice';
 
 export const sortType = [
 	{
@@ -31,7 +31,7 @@ export const sortType = [
 
 function Sort() {
 	const dispatch = useDispatch();
-	const sort = useSelector((state) => state.filterS.sort);
+	const { sort } = useSelector(selectFilter);
 	const sortRef = React.useRef();
 
 	const [open, setOpen] = React.useState(false); // открывать лист сортировки
@@ -43,8 +43,7 @@ function Sort() {
 
 	React.useEffect(() => {
 		const clickOutside = (event) => {
-			if (!event.path.includes(sortRef.current)) {
-				// console.log('click in sort');
+			if (!event.composedPath().includes(sortRef.current)) {
 				setOpen(false);
 			}
 		};

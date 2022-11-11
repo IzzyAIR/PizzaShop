@@ -1,12 +1,19 @@
 import React from 'react';
-import axios from 'axios';
 import qs from 'qs';
 
+//Redux компоненты
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategoryId, setCurrentPage, setFilters } from '../Redux/Slice/filterSlice';
+import {
+	selectFilter,
+	setCategoryId,
+	setCurrentPage,
+	setFilters,
+} from '../Redux/Slice/filterSlice';
+import { fetchPizza, selectPizzaData } from '../Redux/Slice/pizzaSlice';
 
 //Компоненты
+import NotFoundPizzas from '../ReactComponets/NotFoundBlock/NotFoundPizzas';
 import Categories from '../ReactComponets/Categories';
 import Sort from '../ReactComponets/Sort';
 import Pagination from '../ReactComponets/Pagination';
@@ -20,9 +27,10 @@ import { AppContext } from '../App';
 function Home() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { items, status } = useSelector(selectPizzaData);
 
-	//Сортировка, категори логика на Redux
-	const { categoryId, sort, currentPage } = useSelector((state) => state.filterS);
+	//Сортировка, категори логика из Redux
+	const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
 
 	const onChangeCategory = (id) => {
 		dispatch(setCategoryId(id));
@@ -31,29 +39,30 @@ function Home() {
 		dispatch(setCurrentPage(number));
 	};
 
-	//Поиск, пицца блоки и состояние загрузки
-	const { searchVal } = React.useContext(AppContext);
-	const [pizzaItems, setPizzaItems] = React.useState([]);
-	const [isLoading, setIsLoading] = React.useState(true);
+	//Поиск
 
 	const isSearch = React.useRef(false);
 
-	const fetchPizzas = () => {
-		setIsLoading(true);
-		//Сортировка, категори для отправки в бэк
-		const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
-		const sortBy = sort.sortProperty.replace('-', '');
-		const category = categoryId > 0 ? `&category=${categoryId}` : '';
+	//Сортировка и категори для отправки в бэк
+	const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
+	const sortBy = sort.sortProperty.replace('-', '');
+	const category = categoryId > 0 ? `&category=${categoryId}` : '';
 
-		axios
-			.get(
-				`https://633af5e2e02b9b64c61bef81.mockapi.io/PizzaBlock?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}`,
-			)
-			.then((response) => {
-				setPizzaItems(response.data);
-				setIsLoading(false);
-			});
+	const getPizzas = async () => {
+		dispatch(
+			fetchPizza({
+				order,
+				sortBy,
+				category,
+				currentPage,
+			}),
+		);
 	};
+
+	//Получение обработанных данных с Redux pizzaSlice
+	React.useEffect(() => {
+		getPizzas();
+	}, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
 	//Сохранение параметров фильтрации в URL
 	const isMouted = React.useRef(false);
@@ -70,7 +79,7 @@ function Home() {
 		isMouted.current = true;
 	}, [categoryId, sort.sortProperty, sort.sortProperty]);
 
-	// Отправления параметров URL в Redux
+	// Получение обработанных данных с Redux filterSlice
 	React.useEffect(() => {
 		if (window.location.search) {
 			const params = qs.parse(window.location.search.substring(1));
@@ -87,26 +96,17 @@ function Home() {
 		}
 	}, []);
 
-	//Отправка и получение параметров URL с Бэка
-	React.useEffect(() => {
-		window.scroll(0, 0);
-		if (!isSearch.current) {
-			fetchPizzas();
-		}
-		isSearch.current = false;
-	}, [categoryId, sort.sortProperty, searchVal, currentPage]);
-
 	//Список пицц и загрузка
 	const skelleton = [...new Array(6)].map((_, i) => <PizzaLoader key={i} />);
-	const pizzas = pizzaItems
+	const pizzas = items
 		.filter((obj) => {
-			if (obj.title.toLowerCase().includes(searchVal.toLowerCase())) {
+			if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
 				return true;
 			}
 			return false;
 		})
 		.map((obj) => <PizzaItem key={obj.id} {...obj} />);
-	console.log('от бэка', pizzaItems);
+
 	return (
 		<div className='container'>
 			<div className='content__top'>
@@ -114,7 +114,11 @@ function Home() {
 				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<div className='content__items'>{isLoading ? skelleton : pizzas}</div>
+			{status === 'error' ? (
+				<NotFoundPizzas />
+			) : (
+				<div className='content__items'>{status === 'loading' ? skelleton : pizzas}</div>
+			)}
 			<Pagination currentPage={currentPage} onChangePage={onChangePage} />
 		</div>
 	);
